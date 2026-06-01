@@ -57,10 +57,6 @@ export const initializeShellEnv = async (): Promise<Record<string, string>> => {
  * @returns The fetched shell environment variables
  */
 export const refreshShellEnvProxyVars = async (): Promise<Record<string, string>> => {
-  if (process.platform === 'win32') {
-    return {};
-  }
-
   // Clear stale proxy vars first so shell-env does not inherit them into the
   // login shell subprocess (removed .zshrc exports would otherwise persist).
   for (const key of PROXY_ENV_KEYS) {
