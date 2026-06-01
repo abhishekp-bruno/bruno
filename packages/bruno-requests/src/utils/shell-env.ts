@@ -4,6 +4,8 @@
  * Fetches environment variables from the user's shell configuration files (e.g., .zshenv, .bashrc)
  */
 
+import path from 'path';
+
 export const PROXY_ENV_KEYS = [
   'http_proxy',
   'HTTP_PROXY',
@@ -14,7 +16,6 @@ export const PROXY_ENV_KEYS = [
   'all_proxy',
   'ALL_PROXY'
 ] as const;
-import path from 'path';
 
 const fetchShellEnv = async (): Promise<Record<string, string>> => {
   if (process.platform === 'win32') {
@@ -56,6 +57,10 @@ export const initializeShellEnv = async (): Promise<Record<string, string>> => {
  * @returns The fetched shell environment variables
  */
 export const refreshShellEnvProxyVars = async (): Promise<Record<string, string>> => {
+  if (process.platform === 'win32') {
+    return {};
+  }
+
   // Clear stale proxy vars first so shell-env does not inherit them into the
   // login shell subprocess (removed .zshrc exports would otherwise persist).
   for (const key of PROXY_ENV_KEYS) {
@@ -68,6 +73,8 @@ export const refreshShellEnvProxyVars = async (): Promise<Record<string, string>
     const value = shellEnvVars[key];
     if (value) {
       process.env[key] = value;
+    } else {
+      delete process.env[key];
     }
   }
 
