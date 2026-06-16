@@ -22,7 +22,7 @@ import { existsSync, readFileSync, writeFileSync } from 'fs';
 import { summarize } from './stats';
 
 export type Direction = 'smaller' | 'bigger';
-export type Unit = 'ms' | 's' | 'ops/s' | 'bytes' | '%' | 'count';
+export type Unit = 'ms' | 's' | 'ops/s' | 'bytes' | 'MB' | '%' | 'count';
 
 export interface SuiteMeta {
   name: string;
